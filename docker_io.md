@@ -1,3 +1,35 @@
+AXH notes
+=========
+
+If you are using the latest docker tools on Mac, this ticket is probably helpful, http://stackoverflow.com/questions/32834082/how-to-increase-docker-machine-memory-mac
+
+building
+--------
+
+build using
+
+    docker build -t psql95 .
+    docker build --no-cache -t psql95 .
+
+to rebuild, run
+
+    docker build -rm .
+
+running
+-------
+
+normal run
+
+    docker run -d -p localhost:5432:5432 --name db psql95 /sbin/my_init
+
+double-check the port is available
+
+    docker port db 5432
+
+view the logs
+
+    docker logs -f db
+
 Docker notes
 ============
 

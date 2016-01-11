@@ -33,7 +33,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main 9.5" > /
 # packages needed for compilation
 RUN apt-get update
 
-RUN apt-get install -y autoconf build-essential cmake docbook-mathml docbook-xsl libboost-dev libboost-thread-dev libboost-filesystem-dev libboost-system-dev libboost-iostreams-dev libboost-program-options-dev libboost-timer-dev libcunit1-dev libgdal-dev libgeos++-dev libgeotiff-dev libgmp-dev libjson0-dev libjson-c-dev liblas-dev libmpfr-dev libopenscenegraph-dev libpq-dev libproj-dev libxml2-dev postgresql-server-dev-9.5 xsltproc git build-essential wget 
+RUN apt-get install -y autoconf build-essential cmake docbook-mathml docbook-xsl libboost-dev libboost-thread-dev libboost-filesystem-dev libboost-system-dev libboost-iostreams-dev libboost-program-options-dev libboost-timer-dev libcunit1-dev libgdal-dev libgeos++-dev libgeotiff-dev libgmp-dev libjson0-dev libjson-c-dev liblas-dev libmpfr-dev libopenscenegraph-dev libpq-dev libproj-dev libxml2-dev postgresql-server-dev-9.5 xsltproc git build-essential wget
 
 # application packages
 RUN apt-get install -y postgresql-9.5
@@ -46,11 +46,18 @@ RUN wget https://gforge.inria.fr/frs/download.php/file/32994/CGAL-4.3.tar.gz &&\
     cmake .. &&\
     make -j3 && make install
 
+# orig sfcgal method
 # download and compile SFCGAL
-RUN git clone https://github.com/Oslandia/SFCGAL.git
-RUN cd SFCGAL && cmake . && make -j3 && make install
-# cleanup
-RUN rm -Rf SFCGAL
+# RUN git clone https://github.com/Oslandia/SFCGAL.git
+# RUN cd SFCGAL && cmake . && make -j3 && make install
+# # cleanup
+# RUN rm -Rf SFCGAL
+
+# andrewxhill fix for stable sfcgal version 
+RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.2.0.tar.gz
+RUN tar -xzf v1.2.0.tar.gz
+RUN cd SFCGAL-1.2.0 && cmake . && make -j $PROCESSOR_COUNT && make install
+RUN rm -Rf v1.2.0.tar.gz SFCGAL-1.2.0
 
 # download and install GEOS 3.5
 RUN wget http://download.osgeo.org/geos/geos-3.5.0.tar.bz2 &&\
@@ -107,7 +114,7 @@ RUN ldconfig
 RUN apt-get remove -y --purge autotools-dev libgeos-dev libgif-dev libgl1-mesa-dev libglu1-mesa-dev libgnutls-dev libgpg-error-dev libhdf4-alt-dev libhdf5-dev libicu-dev libidn11-dev libjasper-dev libjbig-dev libjpeg8-dev libjpeg-dev libjpeg-turbo8-dev libkrb5-dev libldap2-dev libltdl-dev liblzma-dev libmysqlclient-dev libnetcdf-dev libopenthreads-dev libp11-kit-dev libpng12-dev libpthread-stubs0-dev librtmp-dev libspatialite-dev libsqlite3-dev libssl-dev libstdc++-4.8-dev libtasn1-6-dev libtiff5-dev libwebp-dev libx11-dev libx11-xcb-dev libxau-dev libxcb1-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-glx0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxdamage-dev libxdmcp-dev libxerces-c-dev libxext-dev libxfixes-dev libxshmfence-dev libxxf86vm-dev linux-libc-dev manpages-dev mesa-common-dev libgcrypt11-dev unixodbc-dev uuid-dev x11proto-core-dev x11proto-damage-dev x11proto-dri2-dev x11proto-fixes-dev x11proto-gl-dev x11proto-input-dev x11proto-kb-dev x11proto-xext-dev x11proto-xf86vidmode-dev xtrans-dev zlib1g-dev
 
 # installed packages
-RUN apt-get remove -y --purge autoconf build-essential cmake docbook-mathml docbook-xsl libboost-dev libboost-filesystem-dev libboost-timer-dev libcgal-dev libcunit1-dev libgdal-dev libgeos++-dev libgeotiff-dev libgmp-dev libjson0-dev libjson-c-dev liblas-dev libmpfr-dev libopenscenegraph-dev libpq-dev libproj-dev libxml2-dev postgresql-server-dev-9.5 xsltproc git build-essential wget 
+RUN apt-get remove -y --purge autoconf build-essential cmake docbook-mathml docbook-xsl libboost-dev libboost-filesystem-dev libboost-timer-dev libcgal-dev libcunit1-dev libgdal-dev libgeos++-dev libgeotiff-dev libgmp-dev libjson0-dev libjson-c-dev liblas-dev libmpfr-dev libopenscenegraph-dev libpq-dev libproj-dev libxml2-dev postgresql-server-dev-9.5 xsltproc git build-essential wget
 
 # additional compilation packages
 RUN apt-get remove -y --purge automake m4 make
@@ -119,7 +126,7 @@ RUN mkdir /etc/service/postgresql
 ADD postgresql.sh /etc/service/postgresql/run
 
 # Adjust PostgreSQL configuration so that remote connections to the
-# database are possible. 
+# database are possible.
 RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.5/main/pg_hba.conf
 
 # And add ``listen_addresses`` to ``/etc/postgresql/9.5/main/postgresql.conf``
@@ -142,4 +149,3 @@ ADD init_db.sh /root/init_db.sh
 #
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-

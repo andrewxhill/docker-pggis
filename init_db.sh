@@ -29,7 +29,7 @@ do
     DBNAME=$(basename -s ".backup" "$f")
     echo "Creating a new database $DBNAME.."
     /usr/bin/psql -U pggis -h localhost -c "CREATE DATABASE $DBNAME WITH OWNER = pggis     ENCODING = 'UTF8'     TEMPLATE = template0    CONNECTION LIMIT = -1;" postgres
-    /usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; CREATE EXTENSION postgis_sfcgal; drop type if exists texture; create type texture as (url text,uv float[][]);" $DBNAME
+    /usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION citext; CREATE EXTENSION pg_trgm; CREATE EXTENSION btree_gist; CREATE EXTENSION hstore; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION unaccent; CREATE EXTENSION postgres_fdw; CREATE EXTENSION pgcrypto; CREATE EXTENSION plpythonu; CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; CREATE EXTENSION postgis_sfcgal; drop type if exists texture; create type texture as (url text,uv float[][]);" $DBNAME
 #    /usr/bin/psql -U pggis -h localhost -w -f /usr/share/postgresql/9.5/contrib/postgis-2.1/sfcgal.sql -d $DBNAME
 
     echo "Restoring database $DBNAME.."
@@ -48,7 +48,7 @@ do
     DBNAME=$(basename -s ".sql" "$f")
     echo "Creating a new database $DBNAME.."
     /usr/bin/psql -U pggis -h localhost -c "CREATE DATABASE $DBNAME WITH OWNER = pggis     ENCODING = 'UTF8'     TEMPLATE = template0    CONNECTION LIMIT = -1;" postgres
-    /usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION postgis_sfcgal; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; drop type if exists texture; create type texture as (url text,uv float[][]);" $DBNAME
+    /usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION citext; CREATE EXTENSION pg_trgm; CREATE EXTENSION btree_gist; CREATE EXTENSION hstore; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION unaccent; CREATE EXTENSION postgres_fdw; CREATE EXTENSION pgcrypto; CREATE EXTENSION plpythonu; CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION postgis_sfcgal; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; drop type if exists texture; create type texture as (url text,uv float[][]);" $DBNAME
 #    /usr/bin/psql -U pggis -h localhost -w -f /usr/share/postgresql/9.5/contrib/postgis-2.1/sfcgal.sql -d $DBNAME
     echo "Restoring database $DBNAME.."
     /usr/bin/psql -U pggis -h localhost -d $DBNAME -w -f "$f"
@@ -61,7 +61,7 @@ echo "Creating a new empty database..."
 /usr/bin/psql -U pggis -h localhost -c "CREATE DATABASE pggis WITH OWNER = pggis     ENCODING = 'UTF8'     TEMPLATE = template0    CONNECTION LIMIT = -1;" postgres
 
 # activate all needed extension in pggis database
-/usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION postgis_sfcgal; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; drop type if exists texture;
+/usr/bin/psql -U pggis -h localhost -w -c "CREATE EXTENSION citext; CREATE EXTENSION pg_trgm; CREATE EXTENSION btree_gist; CREATE EXTENSION hstore; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION unaccent; CREATE EXTENSION postgres_fdw; CREATE EXTENSION pgcrypto; CREATE EXTENSION plpythonu; CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION postgis_sfcgal; CREATE EXTENSION pgrouting; CREATE EXTENSION pointcloud; CREATE EXTENSION pointcloud_postgis; drop type if exists texture;
 create type texture as (url text,uv float[][]);" pggis
 #/usr/bin/psql -U pggis -h localhost -w -f /usr/share/postgresql/9.5/contrib/postgis-2.1/sfcgal.sql -d pggis
 
