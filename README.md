@@ -9,21 +9,21 @@ If you've already setup your vm you might need to alter the available memory. So
 
 #### update your config
 
-```~/.docker/machine/machines/default/config.json```
+    ~/.docker/machine/machines/default/config.json
 
 update your memory to,
 
-```"Memory": 5120```
+    "Memory": 5120
 
 Go ahead and stop your VM now.
 
-```docker-machine stop default```
+    docker-machine stop default
 
 Next, you'll likely need to up the limit on your VM as well. I did this step by just spinning up VirtualBox, editing the VM. Do that by **Settings -> System -> Base Memory**. I just made it **5120mb** also.
 
 Finally, quit VirtalBox and restart the VM in your terminal
 
-```docker-machine start default```
+    docker-machine start default
 
 There were a few instructions that I then followed to ensure that the IP addresses were running normally in the newly started machine.
 
@@ -33,8 +33,6 @@ building
 build using
 
     docker build -t psql95 .
-
-    _docker build --no-cache -t psql95 ._
 
 to rebuild, run
 
