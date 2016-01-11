@@ -43,15 +43,24 @@ running
 
 normal run
 
-    docker run -d -p localhost:5432:5432 --name db psql95 /sbin/my_init
+    docker run -d -p 127.0.0.1:5432:5432 --name db psql95 /sbin/my_init
 
-double-check the port is available
+get the IP address
+
+    docker-machine ip default
+
+double-check the port is exposed
 
     docker port db 5432
 
 view the logs
 
     docker logs -f db
+
+if needed cleanup all containers
+
+    docker ps -a | awk 'NR > 1 {print $1}' | xargs docker rm
+
 
 
 A PG GIS setup for Docker
