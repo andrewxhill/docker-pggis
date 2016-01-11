@@ -53,10 +53,10 @@ RUN wget https://gforge.inria.fr/frs/download.php/file/32994/CGAL-4.3.tar.gz &&\
 # # cleanup
 # RUN rm -Rf SFCGAL
 
-# andrewxhill fix for stable sfcgal version 
+# andrewxhill fix for stable sfcgal version
 RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.2.0.tar.gz
 RUN tar -xzf v1.2.0.tar.gz
-RUN cd SFCGAL-1.2.0 && cmake . && make -j $PROCESSOR_COUNT && make install
+RUN cd SFCGAL-1.2.0 && cmake . && make -j 1 && make install
 RUN rm -Rf v1.2.0.tar.gz SFCGAL-1.2.0
 
 # download and install GEOS 3.5

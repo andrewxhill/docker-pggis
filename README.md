@@ -1,3 +1,61 @@
+PostGIS + lots of goodies for Docker
+
+A mod of https://github.com/vpicavet/docker-pggis
+
+andrewxhill notes
+=========
+
+If you've already setup your vm you might need to alter the available memory. Some of the installation steps here are hogs.
+
+#### update your config
+
+```~/.docker/machine/machines/default/config.json```
+
+update your memory to,
+
+```"Memory": 5120```
+
+Go ahead and stop your VM now.
+
+```docker-machine stop default```
+
+Next, you'll likely need to up the limit on your VM as well. I did this step by just spinning up VirtualBox, editing the VM. Do that by **Settings -> System -> Base Memory**. I just made it **5120mb** also.
+
+Finally, quit VirtalBox and restart the VM in your terminal
+
+```docker-machine start default```
+
+There were a few instructions that I then followed to ensure that the IP addresses were running normally in the newly started machine.
+
+building
+--------
+
+build using
+
+    docker build -t psql95 .
+
+    _docker build --no-cache -t psql95 ._
+
+to rebuild, run
+
+    docker build -rm .
+
+running
+-------
+
+normal run
+
+    docker run -d -p localhost:5432:5432 --name db psql95 /sbin/my_init
+
+double-check the port is available
+
+    docker port db 5432
+
+view the logs
+
+    docker logs -f db
+
+
 A PG GIS setup for Docker
 =========================
 
@@ -128,7 +186,7 @@ mkdir /etc/ssl/private-copy; mv /etc/ssl/private/* /etc/ssl/private-copy/; rm -r
 References
 ==========
 
-More complete documentation on Oslandia's blog post : 
+More complete documentation on Oslandia's blog post :
 http://www.oslandia.com/full-spatial-database-power-in-2-lines-en.html
 
 Dockerfile reference :
@@ -136,4 +194,3 @@ http://docs.docker.io/reference/builder/
 
 PostgreSQL service example :
 http://docs.docker.io/examples/postgresql_service/
-
